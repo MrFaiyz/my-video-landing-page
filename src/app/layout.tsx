@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: '3D Camera Lens Studio',
-  description: 'A creative studio with interactive 3D elements',
+  title: 'EditPro Studio - Professional Video Editing Services',
+  description: 'Transform your raw footage into compelling visual stories with our professional video editing services. Expert editors, latest software, stunning results.',
 }
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} overflow-x-hidden`}>
+      <body className={`${inter.className} overflow-x-hidden bg-white`}>
         {children}
       </body>
     </html>
