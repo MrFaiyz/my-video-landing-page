@@ -46,7 +46,7 @@ export const HeroSection = () => {
 
   // Transform scroll into 3D movement
   const cameraZ = useTransform(scrollYProgress, [0, 1], [10, -40])
-  const textOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [1, 1, 0, 0])
+  const textOpacity = useTransform(scrollYProgress, [0, 0.08, 0.12, 0.2], [1, 1, 0, 0])
   const textScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.7])
   const lensScale = useTransform(scrollYProgress, [0, 1], [0, 1])
 

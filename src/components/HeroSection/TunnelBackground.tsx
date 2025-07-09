@@ -4,48 +4,48 @@ import { Mesh } from 'three'
 import { MotionValue } from 'framer-motion'
 
 export const TunnelBackground = ({ scrollProgress }: { scrollProgress: MotionValue<number> }) => {
-  const filmStripRef = useRef<Mesh>(null)
-  const playButtonRef = useRef<Mesh>(null)
-  const timelineRef = useRef<Mesh>(null)
+  const outerCircleRef = useRef<Mesh>(null)
+  const innerCircleRef = useRef<Mesh>(null)
+  const centerDotRef = useRef<Mesh>(null)
   const particlesRef = useRef<Mesh[]>([])
 
   useFrame((state) => {
     const time = state.clock.elapsedTime
     const currentScrollProgress = scrollProgress.get()
     
-    // Animate film strip circle
-    if (filmStripRef.current) {
-      filmStripRef.current.rotation.z = time * 0.02
+    // Animate outer circle
+    if (outerCircleRef.current) {
+      outerCircleRef.current.rotation.z = time * 0.015
       const scale = 1 + currentScrollProgress * 1.5
-      filmStripRef.current.scale.setScalar(scale)
+      outerCircleRef.current.scale.setScalar(scale)
       
-      if (filmStripRef.current.material && 'opacity' in filmStripRef.current.material) {
-        const opacity = Math.max(0.03, 0.12 - currentScrollProgress * 0.08)
-        filmStripRef.current.material.opacity = opacity
-      }
-    }
-    
-    // Animate play button
-    if (playButtonRef.current) {
-      playButtonRef.current.rotation.z = Math.sin(time * 0.5) * 0.1
-      const scale = 0.8 + Math.sin(time * 0.8) * 0.1 + currentScrollProgress * 0.5
-      playButtonRef.current.scale.setScalar(scale)
-      
-      if (playButtonRef.current.material && 'opacity' in playButtonRef.current.material) {
-        const opacity = Math.max(0.05, 0.15 - currentScrollProgress * 0.1)
-        playButtonRef.current.material.opacity = opacity
-      }
-    }
-    
-    // Animate timeline
-    if (timelineRef.current) {
-      timelineRef.current.position.x = Math.sin(time * 0.3) * 0.2
-      const scale = 1 + currentScrollProgress * 0.8
-      timelineRef.current.scale.setScalar(scale)
-      
-      if (timelineRef.current.material && 'opacity' in timelineRef.current.material) {
+      if (outerCircleRef.current.material && 'opacity' in outerCircleRef.current.material) {
         const opacity = Math.max(0.02, 0.08 - currentScrollProgress * 0.05)
-        timelineRef.current.material.opacity = opacity
+        outerCircleRef.current.material.opacity = opacity
+      }
+    }
+    
+    // Animate inner circle
+    if (innerCircleRef.current) {
+      innerCircleRef.current.rotation.z = -time * 0.025
+      const scale = 0.8 + Math.sin(time * 0.6) * 0.05 + currentScrollProgress * 0.8
+      innerCircleRef.current.scale.setScalar(scale)
+      
+      if (innerCircleRef.current.material && 'opacity' in innerCircleRef.current.material) {
+        const opacity = Math.max(0.03, 0.1 - currentScrollProgress * 0.06)
+        innerCircleRef.current.material.opacity = opacity
+      }
+    }
+    
+    // Animate center dot
+    if (centerDotRef.current) {
+      const pulse = 1 + Math.sin(time * 1.2) * 0.1
+      const scale = pulse * (0.5 + currentScrollProgress * 0.3)
+      centerDotRef.current.scale.setScalar(scale)
+      
+      if (centerDotRef.current.material && 'opacity' in centerDotRef.current.material) {
+        const opacity = Math.max(0.05, 0.2 - currentScrollProgress * 0.1)
+        centerDotRef.current.material.opacity = opacity
       }
     }
     
@@ -75,48 +75,48 @@ export const TunnelBackground = ({ scrollProgress }: { scrollProgress: MotionVal
 
   return (
     <group>
-      {/* Film strip circle - represents video editing */}
+      {/* Outer circle - clean and minimal */}
       <mesh
-        ref={filmStripRef}
+        ref={outerCircleRef}
         position={[0, 0, -12]}
       >
-        <torusGeometry args={[6, 0.3, 8, 32]} />
+        <torusGeometry args={[8, 0.15, 16, 64]} />
         <meshStandardMaterial
-          color="#2a2a2a"
+          color="#e5e7eb"
           transparent
-          opacity={0.12}
-          emissive="#1a1a1a"
-          emissiveIntensity={0.1}
+          opacity={0.08}
+          emissive="#f3f4f6"
+          emissiveIntensity={0.05}
         />
       </mesh>
       
-      {/* Play button symbol in center */}
+      {/* Inner circle */}
       <mesh
-        ref={playButtonRef}
+        ref={innerCircleRef}
         position={[0, 0, -10]}
       >
-        <coneGeometry args={[1.2, 2, 3]} />
+        <torusGeometry args={[4, 0.08, 16, 64]} />
         <meshStandardMaterial
           color="#3ac4ec"
           transparent
-          opacity={0.15}
+          opacity={0.1}
           emissive="#3ac4ec"
-          emissiveIntensity={0.1}
+          emissiveIntensity={0.05}
         />
       </mesh>
       
-      {/* Timeline bar - represents video editing timeline */}
+      {/* Center dot */}
       <mesh
-        ref={timelineRef}
-        position={[0, -4, -8]}
+        ref={centerDotRef}
+        position={[0, 0, -8]}
       >
-        <boxGeometry args={[12, 0.2, 0.1]} />
+        <sphereGeometry args={[0.3, 16, 16]} />
         <meshStandardMaterial
           color="#FF4C4C"
           transparent
-          opacity={0.08}
+          opacity={0.2}
           emissive="#FF4C4C"
-          emissiveIntensity={0.05}
+          emissiveIntensity={0.1}
         />
       </mesh>
       
@@ -133,13 +133,13 @@ export const TunnelBackground = ({ scrollProgress }: { scrollProgress: MotionVal
             -8 - i * 1.5
           ]}
         >
-          <sphereGeometry args={[0.02, 6, 6]} />
+          <sphereGeometry args={[0.015, 8, 8]} />
           <meshStandardMaterial
-            color="#f1f3f4"
+            color="#f9fafb"
             transparent
-            opacity={0.3}
+            opacity={0.2}
             emissive="#ffffff"
-            emissiveIntensity={0.05}
+            emissiveIntensity={0.02}
           />
         </mesh>
       ))}
