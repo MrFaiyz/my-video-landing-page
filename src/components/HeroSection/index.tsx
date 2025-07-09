@@ -53,7 +53,7 @@ export const HeroSection = () => {
           <Canvas>
             <PerspectiveCamera 
               makeDefault 
-              position={[0, 0, cameraZ.get()]} 
+              position={[0, 0, cameraZ.get() ?? 10]} 
               fov={75}
               near={0.1}
               far={1000}
@@ -88,9 +88,9 @@ export const HeroSection = () => {
             <Environment preset="studio" background={false} />
             
             {/* 3D Scene Components */}
-            <TunnelBackground scrollProgress={scrollYProgress.get()} />
-            <CameraLens scrollProgress={scrollYProgress.get()} />
-            <FloatingIcons scrollProgress={scrollYProgress.get()} />
+            <TunnelBackground scrollProgress={scrollYProgress.get() ?? 0} />
+            <CameraLens scrollProgress={scrollYProgress.get() ?? 0} />
+            <FloatingIcons scrollProgress={scrollYProgress.get() ?? 0} />
             
             {/* Atmospheric fog */}
             <fog attach="fog" args={['#ffffff', 20, 100]} />
