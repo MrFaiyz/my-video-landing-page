@@ -1,15 +1,38 @@
 'use client'
 
 import { Canvas } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { CameraLens } from './CameraLens'
 import { TunnelBackground } from './TunnelBackground'
 import { FloatingIcons } from './FloatingIcons'
-import { Environment, PerspectiveCamera } from '@react-three/drei'
+import { Environment } from '@react-three/drei'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import { Typewriter } from 'react-simple-typewriter'
 import Loader from '../Loader'
 import Navbar from '../Navbar'
+
+// Camera component that can use MotionValue
+const AnimatedCamera = ({ cameraZ }: { cameraZ: any }) => {
+  const cameraRef = useRef<any>(null)
+  
+  useFrame(() => {
+    if (cameraRef.current) {
+      cameraRef.current.position.z = cameraZ.get()
+    }
+  })
+  
+  return (
+    <perspectiveCamera
+      ref={cameraRef}
+      makeDefault
+      position={[0, 0, 10]}
+      fov={75}
+      near={0.1}
+      far={1000}
+    />
+  )
+}
 
 export const HeroSection = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -51,13 +74,7 @@ export const HeroSection = () => {
         {/* 3D Canvas - Fixed position */}
         <div className="fixed inset-0 z-0">
           <Canvas>
-            <PerspectiveCamera 
-              makeDefault 
-              position={[0, 0, cameraZ.get() ?? 10]} 
-              fov={75}
-              near={0.1}
-              far={1000}
-            />
+            <AnimatedCamera cameraZ={cameraZ} />
             
             {/* Premium lighting setup */}
             <ambientLight intensity={0.3} />
