@@ -1,16 +1,15 @@
 import { useRef } from 'react'
-import { useFrame, extend } from '@react-three/fiber'
-import { Mesh } from 'three'
+import { useFrame } from '@react-three/fiber'
 import { Text, RoundedBox } from '@react-three/drei'
 import { MotionValue } from 'framer-motion'
 
 const iconData = [
-  { pos: [-6, 3, -8], name: 'Premiere', color: '#9999FF', size: 0.8 },
-  { pos: [6, 2, -6], name: 'After Effects', color: '#9999FF', size: 0.7 },
-  { pos: [-4, -2, -10], name: 'CapCut', color: '#FF4C4C', size: 0.9 },
-  { pos: [5, -3, -7], name: 'Filmora', color: '#3ac4ec', size: 0.8 },
-  { pos: [-7, 0, -5], name: 'DaVinci', color: '#FF4C4C', size: 0.85 },
-  { pos: [3, 4, -9], name: 'Final Cut', color: '#3ac4ec', size: 0.75 },
+  { pos: [6, 3, -8], name: 'Premiere', color: '#9999FF', size: 0.8 },
+  { pos: [-6, 2, -6], name: 'After Effects', color: '#9999FF', size: 0.7 },
+  { pos: [4, -2, -10], name: 'CapCut', color: '#FF4C4C', size: 0.9 },
+  { pos: [-5, -3, -7], name: 'Filmora', color: '#3ac4ec', size: 0.8 },
+  { pos: [7, 0, -5], name: 'DaVinci', color: '#FF4C4C', size: 0.85 },
+  { pos: [-3, 4, -9], name: 'Final Cut', color: '#3ac4ec', size: 0.75 },
 ]
 
 export const FloatingIcons = ({ scrollProgress }: { scrollProgress: MotionValue<number> }) => {
@@ -32,7 +31,7 @@ export const FloatingIcons = ({ scrollProgress }: { scrollProgress: MotionValue<
         iconGroup.position.y = iconInfo.pos[1] + Math.sin(time + index * 2) * 0.3
         iconGroup.position.x = iconInfo.pos[0] + Math.cos(time + index * 1.5) * 0.2
         
-        // Move through tunnel based on scroll
+        // Move through space based on scroll
         const baseZ = iconInfo.pos[2]
         iconGroup.position.z = baseZ + currentScrollProgress * 25
         
@@ -83,11 +82,11 @@ export const FloatingIcons = ({ scrollProgress }: { scrollProgress: MotionValue<
           <Text
             position={[0, -0.8, 0]}
             fontSize={0.25}
-            color="#ffffff"
+            color="#333333"
             anchorX="center"
             anchorY="middle"
             outlineWidth={0.02}
-            outlineColor="#000000"
+            outlineColor="#ffffff"
           >
             {icon.name}
           </Text>

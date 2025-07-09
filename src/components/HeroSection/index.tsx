@@ -123,7 +123,7 @@ export const HeroSection = () => {
           }}
         >
           <motion.h1 
-            className="text-6xl md:text-8xl lg:text-9xl font-bold text-black mb-8 leading-tight"
+            className="text-4xl md:text-6xl lg:text-7xl font-bold text-black mb-8 leading-tight"
             style={{
               textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
               background: 'linear-gradient(135deg, #000000 0%, #333333 100%)',
@@ -149,7 +149,7 @@ export const HeroSection = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-xl md:text-2xl lg:text-3xl text-gray-700 max-w-4xl mb-12 leading-relaxed"
+            className="text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mb-12 leading-relaxed"
             style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.1)' }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,14 +165,14 @@ export const HeroSection = () => {
             transition={{ duration: 1, delay: 2 }}
           >
             <motion.button 
-              className="px-10 py-4 bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-full font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
+              className="px-8 py-3 bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-full font-semibold text-base shadow-xl hover:shadow-2xl transition-all duration-300"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
               Start Your Project
             </motion.button>
             <motion.button 
-              className="px-10 py-4 border-2 border-red-500 text-red-500 rounded-full font-semibold text-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-xl"
+              className="px-8 py-3 border-2 border-red-500 text-red-500 rounded-full font-semibold text-base hover:bg-red-500 hover:text-white transition-all duration-300 shadow-xl"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
