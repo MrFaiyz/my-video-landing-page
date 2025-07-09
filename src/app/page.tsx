@@ -8,10 +8,12 @@ export default function Home() {
   return (
     <main className="relative">
       <HeroSection />
-      <AboutSection />
-      <ServicesSection />
-      <TestimonialsSection />
-      <ContactSection />
+      <div className="relative z-20 bg-white">
+        <AboutSection />
+        <ServicesSection />
+        <TestimonialsSection />
+        <ContactSection />
+      </div>
     </main>
   )
 }
