@@ -8,6 +8,7 @@ export default function Home() {
   return (
     <main className="relative">
       <HeroSection />
+      {/* Content sections positioned after the 3D hero */}
       <div className="relative z-20 bg-white">
         <AboutSection />
         <ServicesSection />

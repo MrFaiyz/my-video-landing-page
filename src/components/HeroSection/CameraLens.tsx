@@ -2,109 +2,112 @@ import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Mesh } from 'three'
 
-export const CameraLens = ({ progress }: { progress: number }) => {
-  const lensRef = useRef<Mesh>(null)
+export const CameraLens = ({ scrollProgress }: { scrollProgress: number }) => {
+  const outerRingRef = useRef<Mesh>(null)
   const innerRingRef = useRef<Mesh>(null)
-  const centerRef = useRef<Mesh>(null)
+  const lensGlassRef = useRef<Mesh>(null)
+  const apertureRef = useRef<any>(null)
 
   useFrame((state) => {
     const time = state.clock.elapsedTime
     
-    if (lensRef.current) {
-      // Rotate outer ring
-      lensRef.current.rotation.z = time * 0.2
+    if (outerRingRef.current) {
+      // Smooth rotation
+      outerRingRef.current.rotation.z = time * 0.1
       
-      // Scale based on scroll progress - expand when scrolling down
-      const scale = 1 + progress * 2
-      lensRef.current.scale.setScalar(scale)
-      
-      // Move lens forward/backward based on scroll
-      lensRef.current.position.z = 2 + progress * 5
+      // Scale based on scroll - lens expands as you scroll down
+      const scale = 1 + scrollProgress * 3
+      outerRingRef.current.scale.setScalar(scale)
     }
     
     if (innerRingRef.current) {
-      // Counter-rotate inner ring
-      innerRingRef.current.rotation.z = -time * 0.3
+      // Counter rotation for dynamic effect
+      innerRingRef.current.rotation.z = -time * 0.15
       
-      // Scale inner ring
-      const scale = 1 + progress * 1.5
+      const scale = 1 + scrollProgress * 2.5
       innerRingRef.current.scale.setScalar(scale)
-      innerRingRef.current.position.z = 2.1 + progress * 5
     }
     
-    if (centerRef.current) {
-      // Pulsing effect on center
-      const pulse = 1 + Math.sin(time * 2) * 0.1
-      const scale = pulse * (1 + progress * 1.2)
-      centerRef.current.scale.setScalar(scale)
-      centerRef.current.position.z = 2.2 + progress * 5
+    if (lensGlassRef.current) {
+      // Subtle pulsing effect
+      const pulse = 1 + Math.sin(time * 1.5) * 0.02
+      const scale = pulse * (1 + scrollProgress * 2)
+      lensGlassRef.current.scale.setScalar(scale)
       
-      // Change opacity based on scroll
-      if (centerRef.current.material && 'opacity' in centerRef.current.material) {
-        centerRef.current.material.opacity = Math.max(0.1, 0.4 - progress * 0.3)
+      // Adjust opacity as you scroll deeper
+      if (lensGlassRef.current.material && 'opacity' in lensGlassRef.current.material) {
+        lensGlassRef.current.material.opacity = Math.max(0.1, 0.6 - scrollProgress * 0.4)
       }
+    }
+    
+    // Animate aperture blades
+    if (apertureRef.current) {
+      apertureRef.current.children.forEach((blade: any, index: number) => {
+        const angle = (index / 6) * Math.PI * 2
+        const radius = 1.2 - scrollProgress * 0.8 // Aperture closes as you scroll
+        blade.position.x = Math.cos(angle) * radius
+        blade.position.y = Math.sin(angle) * radius
+        blade.rotation.z = angle + Math.PI / 2
+        
+        const scale = 1 + scrollProgress * 1.5
+        blade.scale.setScalar(scale)
+      })
     }
   })
 
   return (
-    <group>
-      {/* Outer lens ring */}
-      <mesh ref={lensRef}>
-        <torusGeometry args={[3, 0.3, 16, 100]} />
+    <group position={[0, 0, 0]}>
+      {/* Outer lens ring - Blue accent */}
+      <mesh ref={outerRingRef}>
+        <torusGeometry args={[2.5, 0.15, 16, 100]} />
         <meshStandardMaterial
           color="#3ac4ec"
-          metalness={0.8}
-          roughness={0.2}
+          metalness={0.9}
+          roughness={0.1}
           emissive="#3ac4ec"
-          emissiveIntensity={0.4}
+          emissiveIntensity={0.2}
         />
       </mesh>
       
-      {/* Inner lens ring */}
+      {/* Inner lens ring - Red highlight */}
       <mesh ref={innerRingRef}>
-        <torusGeometry args={[2, 0.15, 16, 100]} />
+        <torusGeometry args={[1.8, 0.1, 16, 100]} />
         <meshStandardMaterial
           color="#FF4C4C"
-          metalness={0.9}
-          roughness={0.1}
+          metalness={0.8}
+          roughness={0.2}
           emissive="#FF4C4C"
           emissiveIntensity={0.3}
         />
       </mesh>
       
-      {/* Center lens glass */}
-      <mesh ref={centerRef}>
-        <circleGeometry args={[1.8, 64]} />
+      {/* Lens glass center */}
+      <mesh ref={lensGlassRef}>
+        <circleGeometry args={[1.5, 64]} />
         <meshStandardMaterial
           color="#ffffff"
           transparent
-          opacity={0.4}
-          metalness={0.9}
+          opacity={0.6}
+          metalness={0.95}
           roughness={0.05}
           emissive="#ffffff"
           emissiveIntensity={0.1}
         />
       </mesh>
       
-      {/* Lens aperture blades */}
-      {Array.from({ length: 8 }, (_, i) => (
-        <mesh
-          key={i}
-          position={[
-            Math.cos((i / 8) * Math.PI * 2) * 1.2,
-            Math.sin((i / 8) * Math.PI * 2) * 1.2,
-            2.3 + progress * 5
-          ]}
-          rotation={[0, 0, (i / 8) * Math.PI * 2]}
-        >
-          <boxGeometry args={[0.1, 0.6, 0.05]} />
-          <meshStandardMaterial
-            color="#333333"
-            metalness={0.7}
-            roughness={0.3}
-          />
-        </mesh>
-      ))}
+      {/* Aperture blades */}
+      <group ref={apertureRef}>
+        {Array.from({ length: 6 }, (_, i) => (
+          <mesh key={i}>
+            <boxGeometry args={[0.05, 0.4, 0.02]} />
+            <meshStandardMaterial
+              color="#1a1a1a"
+              metalness={0.8}
+              roughness={0.3}
+            />
+          </mesh>
+        ))}
+      </group>
     </group>
   )
 }
