@@ -1,11 +1,8 @@
 import { useRef } from 'react'
 import { useFrame, extend } from '@react-three/fiber'
 import { Mesh } from 'three'
-import { Text, RoundedBoxGeometry } from '@react-three/drei'
+import { Text, RoundedBox } from '@react-three/drei'
 import { MotionValue } from 'framer-motion'
-
-// Extend the geometry to be used declaratively
-extend({ RoundedBoxGeometry })
 
 const iconData = [
   { pos: [-6, 3, -8], name: 'Premiere', color: '#9999FF', size: 0.8 },
@@ -66,8 +63,11 @@ export const FloatingIcons = ({ scrollProgress }: { scrollProgress: MotionValue<
       {iconData.map((icon, index) => (
         <group key={index} position={icon.pos}>
           {/* Icon cube */}
-          <mesh>
-            <roundedBoxGeometry args={[1, 1, 0.2]} />
+          <RoundedBox
+            args={[1, 1, 0.2]}
+            radius={0.05}
+            smoothness={4}
+          >
             <meshStandardMaterial 
               color={icon.color}
               transparent 
@@ -77,7 +77,7 @@ export const FloatingIcons = ({ scrollProgress }: { scrollProgress: MotionValue<
               metalness={0.6}
               roughness={0.4}
             />
-          </mesh>
+          </RoundedBox>
           
           {/* Icon label */}
           <Text
