@@ -1,20 +1,22 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Mesh } from 'three'
+import { MotionValue } from 'framer-motion'
 
-export const TunnelBackground = ({ scrollProgress }: { scrollProgress: number }) => {
+export const TunnelBackground = ({ scrollProgress }: { scrollProgress: MotionValue<number> }) => {
   const ringsRef = useRef<Mesh[]>([])
   const particlesRef = useRef<Mesh[]>([])
 
   useFrame((state) => {
     const time = state.clock.elapsedTime
+    const currentScrollProgress = scrollProgress.get()
     
     // Animate tunnel rings
     ringsRef.current.forEach((ring, index) => {
       if (ring) {
         // Move rings toward camera based on scroll
         const baseZ = -index * 5 - 10
-        ring.position.z = baseZ + scrollProgress * 60
+        ring.position.z = baseZ + currentScrollProgress * 60
         
         // Reset ring when it passes camera
         if (ring.position.z > 10) {
@@ -41,7 +43,7 @@ export const TunnelBackground = ({ scrollProgress }: { scrollProgress: number })
     particlesRef.current.forEach((particle, index) => {
       if (particle) {
         // Move particles through tunnel
-        particle.position.z += 0.1 + scrollProgress * 0.2
+        particle.position.z += 0.1 + currentScrollProgress * 0.2
         
         // Reset particle position
         if (particle.position.z > 15) {

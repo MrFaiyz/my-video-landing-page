@@ -88,9 +88,9 @@ export const HeroSection = () => {
             <Environment preset="studio" background={false} />
             
             {/* 3D Scene Components */}
-            <TunnelBackground scrollProgress={scrollYProgress.get() ?? 0} />
-            <CameraLens scrollProgress={scrollYProgress.get() ?? 0} />
-            <FloatingIcons scrollProgress={scrollYProgress.get() ?? 0} />
+            <TunnelBackground scrollProgress={scrollYProgress} />
+            <CameraLens scrollProgress={scrollYProgress} />
+            <FloatingIcons scrollProgress={scrollYProgress} />
             
             {/* Atmospheric fog */}
             <fog attach="fog" args={['#ffffff', 20, 100]} />

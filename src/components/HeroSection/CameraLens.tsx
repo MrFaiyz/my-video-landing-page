@@ -1,8 +1,9 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Mesh } from 'three'
+import { MotionValue } from 'framer-motion'
 
-export const CameraLens = ({ scrollProgress }: { scrollProgress: number }) => {
+export const CameraLens = ({ scrollProgress }: { scrollProgress: MotionValue<number> }) => {
   const outerRingRef = useRef<Mesh>(null)
   const innerRingRef = useRef<Mesh>(null)
   const lensGlassRef = useRef<Mesh>(null)
@@ -10,13 +11,14 @@ export const CameraLens = ({ scrollProgress }: { scrollProgress: number }) => {
 
   useFrame((state) => {
     const time = state.clock.elapsedTime
+    const currentScrollProgress = scrollProgress.get()
     
     if (outerRingRef.current) {
       // Smooth rotation
       outerRingRef.current.rotation.z = time * 0.1
       
       // Scale based on scroll - lens expands as you scroll down
-      const scale = 1 + scrollProgress * 3
+      const scale = 1 + currentScrollProgress * 3
       outerRingRef.current.scale.setScalar(scale)
     }
     
@@ -24,19 +26,19 @@ export const CameraLens = ({ scrollProgress }: { scrollProgress: number }) => {
       // Counter rotation for dynamic effect
       innerRingRef.current.rotation.z = -time * 0.15
       
-      const scale = 1 + scrollProgress * 2.5
+      const scale = 1 + currentScrollProgress * 2.5
       innerRingRef.current.scale.setScalar(scale)
     }
     
     if (lensGlassRef.current) {
       // Subtle pulsing effect
       const pulse = 1 + Math.sin(time * 1.5) * 0.02
-      const scale = pulse * (1 + scrollProgress * 2)
+      const scale = pulse * (1 + currentScrollProgress * 2)
       lensGlassRef.current.scale.setScalar(scale)
       
       // Adjust opacity as you scroll deeper
       if (lensGlassRef.current.material && 'opacity' in lensGlassRef.current.material) {
-        lensGlassRef.current.material.opacity = Math.max(0.1, 0.6 - scrollProgress * 0.4)
+        lensGlassRef.current.material.opacity = Math.max(0.1, 0.6 - currentScrollProgress * 0.4)
       }
     }
     
@@ -44,12 +46,12 @@ export const CameraLens = ({ scrollProgress }: { scrollProgress: number }) => {
     if (apertureRef.current) {
       apertureRef.current.children.forEach((blade: any, index: number) => {
         const angle = (index / 6) * Math.PI * 2
-        const radius = 1.2 - scrollProgress * 0.8 // Aperture closes as you scroll
+        const radius = 1.2 - currentScrollProgress * 0.8 // Aperture closes as you scroll
         blade.position.x = Math.cos(angle) * radius
         blade.position.y = Math.sin(angle) * radius
         blade.rotation.z = angle + Math.PI / 2
         
-        const scale = 1 + scrollProgress * 1.5
+        const scale = 1 + currentScrollProgress * 1.5
         blade.scale.setScalar(scale)
       })
     }

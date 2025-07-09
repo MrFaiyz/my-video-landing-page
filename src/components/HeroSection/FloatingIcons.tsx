@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useFrame, extend } from '@react-three/fiber'
 import { Mesh } from 'three'
 import { Text, RoundedBoxGeometry } from '@react-three/drei'
+import { MotionValue } from 'framer-motion'
 
 // Extend the geometry to be used declaratively
 extend({ RoundedBoxGeometry })
@@ -15,11 +16,12 @@ const iconData = [
   { pos: [3, 4, -9], name: 'Final Cut', color: '#3ac4ec', size: 0.75 },
 ]
 
-export const FloatingIcons = ({ scrollProgress }: { scrollProgress: number }) => {
+export const FloatingIcons = ({ scrollProgress }: { scrollProgress: MotionValue<number> }) => {
   const groupRef = useRef<any>(null)
 
   useFrame((state) => {
     const time = state.clock.elapsedTime
+    const currentScrollProgress = scrollProgress.get()
     
     if (groupRef.current) {
       // Slow orbital rotation
@@ -35,7 +37,7 @@ export const FloatingIcons = ({ scrollProgress }: { scrollProgress: number }) =>
         
         // Move through tunnel based on scroll
         const baseZ = iconInfo.pos[2]
-        iconGroup.position.z = baseZ + scrollProgress * 25
+        iconGroup.position.z = baseZ + currentScrollProgress * 25
         
         // Reset position when too close
         if (iconGroup.position.z > 8) {
@@ -51,7 +53,7 @@ export const FloatingIcons = ({ scrollProgress }: { scrollProgress: number }) =>
         iconGroup.rotation.z = Math.sin(time + index) * 0.1
         
         // Opacity based on scroll and distance
-        const opacity = Math.max(0.3, 0.9 - scrollProgress * 0.3 - distance * 0.02)
+        const opacity = Math.max(0.3, 0.9 - currentScrollProgress * 0.3 - distance * 0.02)
         if (iconGroup.children[0]?.material && 'opacity' in iconGroup.children[0].material) {
           iconGroup.children[0].material.opacity = opacity
         }
