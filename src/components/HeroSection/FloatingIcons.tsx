@@ -1,7 +1,10 @@
 import { useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, extend } from '@react-three/fiber'
 import { Mesh } from 'three'
-import { Text } from '@react-three/drei'
+import { Text, RoundedBoxGeometry } from '@react-three/drei'
+
+// Extend the geometry to be used declaratively
+extend({ RoundedBoxGeometry })
 
 const iconData = [
   { pos: [-6, 3, -8], name: 'Premiere', color: '#9999FF', size: 0.8 },
