@@ -28,7 +28,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-10 py-6 bg-white/10 backdrop-blur-sm">
+    <nav className="fixed top-0 left-0 w-full z-[200] flex items-center justify-between px-10 py-6 bg-white/10 backdrop-blur-sm">
       {/* Company logo */}
       <button 
         onClick={() => scrollToSection('home')}

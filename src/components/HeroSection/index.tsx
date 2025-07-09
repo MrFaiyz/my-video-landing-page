@@ -35,6 +35,7 @@ const AnimatedCamera = ({ cameraZ }: { cameraZ: any }) => {
 
 export const HeroSection = () => {
   const [isLoading, setIsLoading] = useState(true)
+  const [showContent, setShowContent] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   
   // Create scroll-based 3D navigation
@@ -52,6 +53,8 @@ export const HeroSection = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
+      // Show content immediately after loading
+      setTimeout(() => setShowContent(true), 100)
     }, 2500)
     return () => clearTimeout(timer)
   }, [])
@@ -69,7 +72,7 @@ export const HeroSection = () => {
         style={{ height: '600vh' }} // Extended height for smooth 3D navigation
       >
         {/* 3D Canvas - Fixed position */}
-        <div className="fixed inset-0 z-0">
+        <div className="fixed inset-0 z-[1]">
           <Canvas>
             <AnimatedCamera cameraZ={cameraZ} />
             
@@ -113,7 +116,7 @@ export const HeroSection = () => {
 
         {/* Hero Text - Fixed position, fades out as you scroll */}
         <motion.div
-          className="fixed inset-0 z-10 flex flex-col items-center justify-center text-center px-4"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center text-center px-4 pointer-events-none"
           style={{ 
             opacity: textOpacity,
             scale: textScale
@@ -128,9 +131,9 @@ export const HeroSection = () => {
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={showContent ? { scale: 1, opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             Your Story, Perfectly Edited
           </motion.h1>
@@ -138,18 +141,18 @@ export const HeroSection = () => {
           <motion.p 
             className="text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mb-12 leading-relaxed"
             style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.1)' }}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={showContent ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
           >
             Professional video editing services that transform your vision into cinematic reality
           </motion.p>
 
           <motion.div
-            className="flex gap-6"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 2 }}
+            className="flex gap-6 pointer-events-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={showContent ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
           >
             <motion.button 
               className="px-8 py-3 bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-full font-semibold text-base shadow-xl hover:shadow-2xl transition-all duration-300"
@@ -168,24 +171,15 @@ export const HeroSection = () => {
           </motion.div>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Simple scroll hint - no animated bar */}
         <motion.div
-          className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+          className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-[99]"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 3 }}
+          animate={showContent ? { opacity: 1 } : {}}
+          transition={{ delay: 1.2, duration: 0.5 }}
           style={{ opacity: textOpacity }}
         >
-          <div className="flex flex-col items-center">
-            <div className="w-6 h-12 border-2 border-gray-600 rounded-full flex justify-center mb-2">
-              <motion.div
-                className="w-1.5 h-4 bg-gradient-to-b from-blue-400 to-red-500 rounded-full mt-2"
-                animate={{ y: [0, 16, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-            </div>
-            <p className="text-sm text-gray-600 font-medium">Scroll to dive in</p>
-          </div>
+          <p className="text-sm text-gray-600 font-medium">Scroll to explore</p>
         </motion.div>
       </div>
     </>
