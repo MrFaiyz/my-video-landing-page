@@ -8,7 +8,6 @@ import { FloatingIcons } from './FloatingIcons'
 import { Environment } from '@react-three/drei'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
-import { Typewriter } from 'react-simple-typewriter'
 import Loader from '../Loader'
 import Navbar from '../Navbar'
 
@@ -36,7 +35,6 @@ const AnimatedCamera = ({ cameraZ }: { cameraZ: any }) => {
 
 export const HeroSection = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const [showTypewriter, setShowTypewriter] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   
   // Create scroll-based 3D navigation
@@ -54,7 +52,6 @@ export const HeroSection = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
-      setTimeout(() => setShowTypewriter(true), 500)
     }, 2500)
     return () => clearTimeout(timer)
   }, [])
@@ -135,17 +132,7 @@ export const HeroSection = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1, delay: 0.3 }}
           >
-            {showTypewriter && (
-              <Typewriter
-                words={['Your Story, Perfectly Edited']}
-                loop={1}
-                cursor
-                cursorStyle='|'
-                typeSpeed={80}
-                deleteSpeed={50}
-                delaySpeed={1000}
-              />
-            )}
+            Your Story, Perfectly Edited
           </motion.h1>
           
           <motion.p 
